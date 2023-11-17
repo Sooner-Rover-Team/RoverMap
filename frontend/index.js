@@ -21,7 +21,27 @@ setInterval(() => {
 
 
 
-let pathMarkers = [];
+// Add a tile layer for the base map
+/*
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+*/
+
+
+/////////DRAWING TOOLS SECTION/////////
+//---------------------------------//
+
+var resizeHandle;
+var selectedCircle;
+
+var circles = [];
+var lables = [];
+var pathMarkers =[];
+
+var activeTool = 'markerDraw';
+var isResizing = false;
+
 let polyLine = new L.polyline(pathMarkers, {
     color: 'red',
     weight: 3,
@@ -29,22 +49,123 @@ let polyLine = new L.polyline(pathMarkers, {
     smoothFactor: 1
 }).addTo(map);
 
-map.on("click", e => {
-    let newMarker = new L.marker(e.latlng).addTo(map);
-    pathMarkers.push(newMarker)
-    console.log("lats",);
-    polyLine.setLatLngs(pathMarkers.map(e => [e._latlng.lat, e._latlng.lng]))
-    document.getElementById("pathOutput").innerText = pathMarkers.map(e => `${e._latlng.lat} ${e._latlng.lng}`).join("\n");
-})
+var pointsList =  document.getElementById("pathOutput")
+map.on('mousedown', function (e) {
+    if (activeTool == 'circleDraw') { //Check for toggle 
+        if (!isResizing) {
+            //Create a new Circle element at the click position
+            selectedCircle = L.circle(e.latlng, { radius: 10, draggable: false, color: "green" }).addTo(map);
+            circles.push(selectedCircle);
+
+            var marker = new L.marker(e.latlng, {opacity: 0}); 
+            marker.bindTooltip(circles.length+"", {permanent: true, className: "circleLabel", direction: 'top', offset: [-15, 20]});
+            marker.addTo(map);
+            lables.push(marker)
+           
+            isResizing = true;
+            //Move circle to mouse positon
+            resizeHandle = e.latlng;
+            map.dragging.disable(); // Disable map dragging
+
+            updateCircleList();
+        }
+    }else if(activeTool == 'markerDraw'){
+        let newMarker = new L.marker(e.latlng).addTo(map);
+        pathMarkers.push(newMarker)
+        console.log("lats",);
+        polyLine.setLatLngs(pathMarkers.map(e => [e._latlng.lat, e._latlng.lng]))
+        pointsList.innerHTML = '<h2>Marker List</h2>';
+        pointsList.innerHTML += ('<p>' + (pathMarkers.map(e => `${e._latlng.lat} ${e._latlng.lng}`).join("<br>")) + '</p>');
+
+    }
+});
+
+//Start resizing
+map.on('mousemove', function (e) {
+    if (isResizing) {
+        //Creates a new radius of the distance between the mouse and the center of the active circle
+        var newRadius = resizeHandle.distanceTo(e.latlng);
+        updateCircleList();
+        selectedCircle.setRadius(newRadius); //Update radius
+       // resizeMarker.setLatLng(selectedCircle.getLatLng()); //Update position
+    }
+});
+
+//End resizing
+map.on('mouseup', function () {
+    if (isResizing) {
+        isResizing = false;
+        updateCircleList();
+        map.dragging.enable(); // Enable map dragging
+    }
+});
+
+//Update the radius list
+var circleList = document.getElementById('circleList');
+function updateCircleList() {
+    circleList.innerHTML = '<h2>Circle List</h2>';
+    circles.forEach(function (circle, index) {
+        var radius = Math.round(circle.getRadius());
+        circleList.innerHTML += '<p> ' 
+            + (index+1) + '. Radius: ' + radius + 
+            'm<br /> Circumference: ' + 2*radius + 'm</p>';
+    });
+}
+
+var createCircleButton = document.getElementById('toggleCircleButton');
+var markerCreateButton = document.getElementById('toggleMarkerButton');
+
+function toggleCircles() {
+    if (activeTool != 'circleDraw') {
+        activeTool = 'circleDraw';
+        createCircleButton.style.background = "green"
+        createCircleButton.textContent = "ACTIVE"
+
+        markerCreateButton.style.background = "white"
+        markerCreateButton.textContent = "INACTIVE"
+    } else {
+        activeTool = 'none'
+        createCircleButton.style.background = "white"
+        createCircleButton.textContent = "INACTIVE"
+    }
+}
+function toggleMarkers() {
+    if (activeTool != 'markerDraw') {
+        activeTool = 'markerDraw';
+        markerCreateButton.style.background = "green"
+        markerCreateButton.textContent = "ACTIVE"
+
+        createCircleButton.style.background = "white"
+        createCircleButton.textContent = "INACTIVE"
+    } else {
+        activeTool = 'none'
+        markerCreateButton.style.background = "white"
+        markerCreateButton.textContent = "INACTIVE"
+    }
+}
+function clearCircles() {
+    circles.forEach(function (circle) {
+        circle.remove();
+    });
+    lables.forEach(function (label) {
+        label.remove();
+    });
+    circles = []
+    lables = []
+    updateCircleList()
+}
+function clearPaths() {
+    pathMarkers.forEach(function (marker) {
+        marker.remove();
+    });
+    pathMarkers = []
+    updateCircleList()
+}
 
 
 
-///////////////////////////////////
-//
-// Unit Conversion Stuff
-//
-//////////////////////////////////
-
+/////////OTHER TOOLS SECTION/////////
+//---------------------------------//
 function typeIndicator() {
     let coordinates = prompt("Enter coordinates in in lng, lat format");
     coordinates = coordinates.replace(" ", "");
