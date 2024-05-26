@@ -1,4 +1,3 @@
-from nis import maps
 import os
 from random import randint, random
 
