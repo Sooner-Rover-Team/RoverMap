@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
 <html>
 
 <head>
@@ -13,22 +9,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./index.css">
     <script src="./leaflet/leaflet.js"></script>
-    
+
     <link rel="stylesheet" href="./leaflet/leaflet.css">
 </head>
 
 <body>
     <div onclick="circleSelect(this)" id="newCircle"></div>
 
-    <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-  
-    <div id='map' style='width: 90%; height: 400px; margin: auto'></div>
-    
+    <div id="map" style="width: 90%; height: 400px; margin: auto"></div>
+
     <div id="mainContainer">
         <div id="tools">
-      
+
             <div id="circleTools">
                 <h3>Circle Tools:</h3>
                 <button onClick="toggleCircles()" id="toggleCircleButton">INACTIVE</button>
@@ -50,9 +42,9 @@
                 <button onclick="openUnitConverter()">Open unit converter</button>
             </div>
         </div>
-        <div id="infoDiv"> 
+        <div id="infoDiv">
             <div id="pathOutput"></div>
-            <div id="circleList"></div>  
+            <div id="circleList"></div>
         </div>
     </div>
 
@@ -60,23 +52,26 @@
     <div id="unitConverter">
         <h1>Unit Converter</h1>
         <p>Degrees, Minutes, Seconds</p>
-        <input placeholder="Degrees" class="convertInput" id="DMSDeg"/> <input placeholder="Minutes" class="convertInput" id="DMSMin"/> <input placeholder="Seconds" class="convertInput" id="DMSSec">
+        <input placeholder="Degrees" class="convertInput" id="DMSDeg" /> <input placeholder="Minutes"
+            class="convertInput" id="DMSMin" /> <input placeholder="Seconds" class="convertInput" id="DMSSec">
 
         <br>
         <br>
 
         <p>Degrees, Decimal Minutes</p>
-        <input placeholder="Degrees" class="convertInput" id="DDMDeg"/> <input placeholder="Decimal Minutes" class="convertInput" id="DDMMin"/>
-        
+        <input placeholder="Degrees" class="convertInput" id="DDMDeg" /> <input placeholder="Decimal Minutes"
+            class="convertInput" id="DDMMin" />
+
         <br>
         <br>
 
         <p>Decimal</p>
-        <input placeholder="Decimal" class="convertInput" id="Decimal"/> <button onclick="copyCoords()">Copy this</button>
+        <input placeholder="Decimal" class="convertInput" id="Decimal" /> <button onclick="copyCoords()">Copy
+            this</button>
 
         <br>
         <br>
-        
+
         <button onclick="closeUnitConverter()" id="closeUnitConverterButton">Close Unit Converter</button>
         <!-- <button onclick="forceUpdate()" id="forceUpdate">Force calculation (Mobile keyevents may not work)</button> -->
 
@@ -84,8 +79,8 @@
             <p>Decimal values previously copied:</p>
         </div>
     </div>
-   <script src="index.js" async defer></script>
-   <!-- <script src="draw-tools.js"></script>-->
+    <script src="index.js" async defer></script>
+    <!-- <script src="draw-tools.js"></script>-->
 </body>
 
 </html>
