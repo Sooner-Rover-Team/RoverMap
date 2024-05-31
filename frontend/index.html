@@ -18,19 +18,23 @@
 
     <div id="map" style="width: 90%; height: 400px; margin: auto"></div>
 
-    <div id="mainContainer">
-        <div id="tools">
+    <div id="container">
+        <div id="tools" class="section">
+            <h2 class="section-title">Tools</h2>
+            <p id="tool-reminder">Click a tool's button to enable it.</p>
 
             <div id="circleTools">
                 <h3>Circle Tools:</h3>
-                <button onClick="toggleCircles()" id="toggleCircleButton">INACTIVE</button>
+                <button onClick="toggleCircles()" id="toggleCircleButton"
+                    class="deactivated-tool-button">INACTIVE</button>
                 <br>
                 <button onClick="clearCircles()" id="clearCircleButton">CLEAR CIRCLES</button>
             </div>
             <br>
             <div id="pathTools">
                 <h3>Path Tools:</h3>
-                <button onclick="toggleMarkers()" id="toggleMarkerButton">INACTIVE</button>
+                <button onclick="toggleMarkers()" id="toggleMarkerButton"
+                    class="deactivated-tool-button">INACTIVE</button>
                 <br>
                 <button onclick="clearPaths()" id="clearMarkerButton">CLEAR PATH</button>
             </div>
@@ -42,15 +46,23 @@
                 <button onclick="openUnitConverter()">Open unit converter</button>
             </div>
         </div>
-        <div id="infoDiv">
-            <div id="pathOutput"></div>
-            <div id="circleList"></div>
+        <div id="info" class="section">
+            <h2 class="section-title">Info</h2>
+
+            <div id="pathOutput">
+                <h3>Path Output</h3>
+                <p>Empty...</p>
+            </div>
+            <div id="circleList">
+                <h3>Circle List</h3>
+                <p>Empty...</p>
+            </div>
         </div>
     </div>
 
 
     <div id="unitConverter">
-        <h1>Unit Converter</h1>
+        <h2>Unit Converter</h2>
         <p>Degrees, Minutes, Seconds</p>
         <input placeholder="Degrees" class="convertInput" id="DMSDeg" /> <input placeholder="Minutes"
             class="convertInput" id="DMSMin" /> <input placeholder="Seconds" class="convertInput" id="DMSSec">
