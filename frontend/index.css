@@ -1,17 +1,48 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: sans-serif;
 }
-* > button{
-    margin:1px;
-    padding: 0.5em;
-}
-body{
+
+body {
     padding: 1em;
 }
 
-#unitConverter{
-    background-color: black;
+button {
+    padding: 0.4em;
+    margin: 0.2em;
+}
+
+.deactivated-tool-button {
+    background-color: rgb(220, 220, 220);
+    color: rgb(43, 43, 43);
+    border: none;
+}
+
+.activated-tool-button {
+    background-color: rgb(0, 220, 90);
+    color: white;
+}
+
+h2 {
+    margin-bottom: 0.4em;
+}
+
+
+#container {
+    margin-top: 1em;
+}
+
+.section {
+    padding: 1em;
+}
+
+#tool-reminder {
+    margin-bottom: 1.5em;
+}
+
+#unitConverter {
+    background-color: rgb(43, 43, 43);
     width: 50%;
     height: 60%;
     position: absolute;
@@ -24,7 +55,7 @@ body{
     overflow-y: scroll;
 }
 
-#closeUnitConverterButton{
+#closeUnitConverterButton {
     padding: 0.25em;
 }
 
@@ -36,42 +67,40 @@ body{
         top: 15%;
         left: 5%;
     }
-  }
+}
 
-#saved{
+#saved {
     padding-top: 1em;
 }
 
-#forceUpdate{
+#forceUpdate {
     display: none;
 }
 
 @media only screen and (max-width: 600px) {
-    #forceUpdate{
+    #forceUpdate {
         display: block;
         margin-top: 1em;
     }
-    
-  }
-  
-#infoDiv{
-    float:right;
-    width:35%;
-}
-
-#tools{
-    float:left;
-    padding: 0.75em;
-    margin-top: 5px;
-}
-
-#pathOutput{
-    float:right;
 
 }
-#circleList{
-    float:left;
 
+#info {
+    float: right;
+    width: 35%;
+}
+
+#tools {
+    float: left;
+}
+
+#pathOutput {
+    float: right;
+
+}
+
+#circleList {
+    float: left;
 }
 
 #clearCircleButton {
@@ -83,14 +112,13 @@ body{
     background-color: black;
     color: aliceblue;
 }
+
 #circleList {
     flex: 1;
     padding: 1em;
 }
 
-#pathOutput{
-    flex: 1; 
+#pathOutput {
+    flex: 1;
     padding: 1em;
 }
-
-
