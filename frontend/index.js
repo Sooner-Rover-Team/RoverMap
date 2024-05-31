@@ -1,4 +1,7 @@
-var map = L.map('map').setView([38.4375, -110.8125], 13);
+// note: leaflet exports itself as `L` on the html side of things.
+// it's pretty bad but they seem to like it... :p
+
+let map = L.map('map').setView([38.4375, -110.8125], 13);
 
 
 let templateString = '/tile/{z}/{x}/{y}'
@@ -7,7 +10,7 @@ console.log(templateString);
 
 L.tileLayer(templateString, {
     maxZoom: 19
-  }).addTo(map);
+}).addTo(map);
 
 
 // Poll for the rover's position every second
@@ -22,6 +25,7 @@ setInterval(() => {
 
 
 // Add a tile layer for the base map
+// TODO: what the fuck
 /*
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
@@ -32,24 +36,40 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 /////////DRAWING TOOLS SECTION/////////
 //---------------------------------//
 
-var resizeHandle;
-var selectedCircle;
+let resizeHandle;
+let selectedCircle;
 
-var circles = [];
-var lables = [];
-var pathMarkers =[];
+let circles = [];
+let lables = [];
+let pathMarkers = [];
 
-var activeTool = 'markerDraw';
-var isResizing = false;
+let activeTool = "none";
+let isResizing = false;
 
-let polyLine = new L.polyline(pathMarkers, {
+const polyLine = new L.polyline(pathMarkers, {
     color: 'red',
     weight: 3,
     opacity: 0.5,
     smoothFactor: 1
 }).addTo(map);
 
-var pointsList =  document.getElementById("pathOutput")
+/// Swap's a given button's class to "deactivated-tool-button" and "activated-tool-button".
+const toggleActivateButton = (button, active) => {
+    console.log("Toggling button `", button.id, "` with activity: ", active);
+
+    if (active) {
+        button.textContent = ACTIVE_BUTTON_TEXT;
+        button.classList.remove("deactivated-tool-button");
+        button.classList.add("activated-tool-button");
+    } else {
+        button.textContent = INACTIVE_BUTTON_TEXT;
+        button.classList.remove("activated-tool-button");
+        button.classList.add("deactivated-tool-button");
+    }
+}
+
+let pointsList = document.getElementById("pathOutput");
+
 map.on('mousedown', function (e) {
     if (activeTool == 'circleDraw') { //Check for toggle 
         if (!isResizing) {
@@ -57,11 +77,11 @@ map.on('mousedown', function (e) {
             selectedCircle = L.circle(e.latlng, { radius: 10, draggable: false, color: "green" }).addTo(map);
             circles.push(selectedCircle);
 
-            var marker = new L.marker(e.latlng, {opacity: 0}); 
-            marker.bindTooltip(circles.length+"", {permanent: true, className: "circleLabel", direction: 'top', offset: [-15, 20]});
+            let marker = new L.marker(e.latlng, { opacity: 0 });
+            marker.bindTooltip(circles.length + "", { permanent: true, className: "circleLabel", direction: 'top', offset: [-15, 20] });
             marker.addTo(map);
             lables.push(marker)
-           
+
             isResizing = true;
             //Move circle to mouse positon
             resizeHandle = e.latlng;
@@ -69,7 +89,7 @@ map.on('mousedown', function (e) {
 
             updateCircleList();
         }
-    }else if(activeTool == 'markerDraw'){
+    } else if (activeTool == 'markerDraw') {
         let newMarker = new L.marker(e.latlng).addTo(map);
         pathMarkers.push(newMarker)
         console.log("lats",);
@@ -84,10 +104,10 @@ map.on('mousedown', function (e) {
 map.on('mousemove', function (e) {
     if (isResizing) {
         //Creates a new radius of the distance between the mouse and the center of the active circle
-        var newRadius = resizeHandle.distanceTo(e.latlng);
+        let newRadius = resizeHandle.distanceTo(e.latlng);
         updateCircleList();
         selectedCircle.setRadius(newRadius); //Update radius
-       // resizeMarker.setLatLng(selectedCircle.getLatLng()); //Update position
+        // resizeMarker.setLatLng(selectedCircle.getLatLng()); //Update position
     }
 });
 
@@ -101,49 +121,44 @@ map.on('mouseup', function () {
 });
 
 //Update the radius list
-var circleList = document.getElementById('circleList');
-function updateCircleList() {
+let circleList = document.getElementById('circleList');
+const updateCircleList = () => {
     circleList.innerHTML = '<h2>Circle List</h2>';
     circles.forEach(function (circle, index) {
-        var radius = Math.round(circle.getRadius());
-        circleList.innerHTML += '<p> ' 
-            + (index+1) + '. Radius: ' + radius + 
-            'm<br /> Circumference: ' + 2*radius + 'm</p>';
+        let radius = Math.round(circle.getRadius());
+        circleList.innerHTML += '<p> '
+            + (index + 1) + '. Radius: ' + radius +
+            'm<br /> Circumference: ' + 2 * radius + 'm</p>';
     });
 }
 
-var createCircleButton = document.getElementById('toggleCircleButton');
-var markerCreateButton = document.getElementById('toggleMarkerButton');
+let createCircleButton = document.getElementById('toggleCircleButton');
+let markerCreateButton = document.getElementById('toggleMarkerButton');
 
-function toggleCircles() {
-    if (activeTool != 'circleDraw') {
+const ACTIVE_BUTTON_TEXT = "ACTIVE";
+const INACTIVE_BUTTON_TEXT = "INACTIVE";
+
+const toggleCircles = () => {
+    // change the active tool
+    if (activeTool == 'circleDraw') {
+        activeTool = 'none'
+    } else {
         activeTool = 'circleDraw';
-        createCircleButton.style.background = "green"
-        createCircleButton.textContent = "ACTIVE"
-
-        markerCreateButton.style.background = "white"
-        markerCreateButton.textContent = "INACTIVE"
-    } else {
-        activeTool = 'none'
-        createCircleButton.style.background = "white"
-        createCircleButton.textContent = "INACTIVE"
     }
+
+    toggleActivateButton(createCircleButton, activeTool == 'circleDraw');
 }
-function toggleMarkers() {
-    if (activeTool != 'markerDraw') {
+const toggleMarkers = () => {
+    // change the active tool
+    if (activeTool == 'markerDraw') {
+        activeTool = 'none'
+    } else {
         activeTool = 'markerDraw';
-        markerCreateButton.style.background = "green"
-        markerCreateButton.textContent = "ACTIVE"
-
-        createCircleButton.style.background = "white"
-        createCircleButton.textContent = "INACTIVE"
-    } else {
-        activeTool = 'none'
-        markerCreateButton.style.background = "white"
-        markerCreateButton.textContent = "INACTIVE"
     }
+
+    toggleActivateButton(markerCreateButton, activeTool == 'markerDraw');
 }
-function clearCircles() {
+const clearCircles = () => {
     circles.forEach(function (circle) {
         circle.remove();
     });
@@ -154,7 +169,7 @@ function clearCircles() {
     lables = []
     updateCircleList()
 }
-function clearPaths() {
+const clearPaths = () => {
     pathMarkers.forEach(function (marker) {
         marker.remove();
     });
@@ -166,31 +181,33 @@ function clearPaths() {
 
 /////////OTHER TOOLS SECTION/////////
 //---------------------------------//
-function typeIndicator() {
-    let coordinates = prompt("Enter coordinates in in lng, lat format");
-    coordinates = coordinates.replace(" ", "");
-    coordinates = coordinates.split(",");
-    console.log(coordinates)
+const typeIndicator = () => {
+    const coordinates = prompt("Enter your coordinate in `lat lon` format").split(" ");
+    console.log("Adding human reference point at `", coordinates, "`...");
+    const lat = parseFloat(coordinates[0]);
+    const lng = parseFloat(coordinates[1]);
+    pathMarkers.push(new L.Marker([lat, lng]).addTo(map));
+
     let isConfirmed = confirm(`Add indicator at lng: ${coordinates[0]}, lat: ${coordinates[1]}?`);
     if (isConfirmed) {
-        var marker = new L.marker(coordinates).addTo(map);
+        let marker = new L.marker(coordinates).addTo(map);
     }
 }
 
 
-function degMinSecToDecimal(deg, min, sec) {
+const degMinSecToDecimal = (deg, min, sec) => {
     console.log("Converting:", deg, min, sec)
     console.log("Returning", (deg + (min / 60) + (sec / 3600)))
     return deg + (min / 60) + (sec / 3600);
 }
 
-function degDecimalMinToDecimal(deg, min) {
+const degDecimalMinToDecimal = (deg, min) => {
     return deg + (min / 60)
 }
 
 let open = false;
 
-function openUnitConverter() {
+const openUnitConverter = () => {
     if (!open) {
         document.getElementById("unitConverter").style.display = "block";
         open = true;
@@ -199,12 +216,12 @@ function openUnitConverter() {
     }
 
 }
-function closeUnitConverter() {
+const closeUnitConverter = () => {
     document.getElementById("unitConverter").style.display = "none";
     open = false;
 }
 
-function updateConversionsBasedOn(el) {
+const updateConversionsBasedOn = (el) => {
     let sources = {
         "DMS": ["DMSDeg", "DMSMin", "DMSSec"],
         "DDM": ["DDMDeg", "DDMMin"],
@@ -263,7 +280,7 @@ Array.from(document.getElementsByClassName("convertInput")).forEach(el => {
 
 
 let valuesCopied = [];
-function copyCoords() {
+const copyCoords = () => {
     let el = document.getElementById("Decimal");
     el.select();
     el.setSelectionRange(0, 9999);
