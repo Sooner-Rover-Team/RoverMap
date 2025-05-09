@@ -23,14 +23,10 @@ setInterval(() => {
 }, 1000);
 
 
-
 // Add a tile layer for the base map
-// TODO: what the fuck
-/*
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
-*/
 
 
 /////////DRAWING TOOLS SECTION/////////
