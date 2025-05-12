@@ -1,6 +1,9 @@
 // note: leaflet exports itself as `L` on the html side of things.
 // it's pretty bad but they seem to like it... :p
 
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
 let map = L.map('map').setView([38.4375, -110.8125], 13);
 
 
