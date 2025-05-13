@@ -1,5 +1,5 @@
 import './index.css';
-import './map.js';
+import { map } from './map.js';
 import { toggleCircles, clearCircles } from './circleTools';
 import { toggleMarkers, clearPaths } from './pathTools';
 import {
@@ -10,7 +10,7 @@ import {
     copyCoords,
     openUnitConverter,
     closeUnitConverter,
-    typeIndicator
+    addWayPoint
 } from './helpers.js';
 
 // Event listeners
@@ -25,4 +25,11 @@ window.updateConversionsBasedOn = updateConversionsBasedOn;
 window.copyCoords = copyCoords;
 window.openUnitConverter = openUnitConverter;
 window.closeUnitConverter = closeUnitConverter;
-window.typeIndicator = typeIndicator;
+
+const pathMarkers = []
+
+window.onload = () => {
+    window.addWayPoint = () => {
+        addWayPoint(map, pathMarkers);
+    };
+};

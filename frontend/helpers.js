@@ -86,7 +86,7 @@ export const closeUnitConverter = () => {
     open = false;
 };
 
-export const typeIndicator = (map, pathMarkers) => {
+export const addWayPoint = (map, pathMarkers) => {
     const coordinates = prompt("Enter your coordinate in `lat lon` format")?.split(" ");
     if (!coordinates || coordinates.length !== 2) return;
 
