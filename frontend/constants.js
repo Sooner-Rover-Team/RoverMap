@@ -1,0 +1,2 @@
+export const ACTIVE_BUTTON_TEXT = "ACTIVE";
+export const INACTIVE_BUTTON_TEXT = "INACTIVE";

@@ -1,0 +1,28 @@
+import './index.css';
+import './map.js';
+import { toggleCircles, clearCircles } from './circleTools';
+import { toggleMarkers, clearPaths } from './pathTools';
+import {
+    toggleActivateButton,
+    degMinSecToDecimal,
+    degDecimalMinToDecimal,
+    updateConversionsBasedOn,
+    copyCoords,
+    openUnitConverter,
+    closeUnitConverter,
+    typeIndicator
+} from './helpers.js';
+
+// Event listeners
+window.toggleCircles = toggleCircles;
+window.clearCircles = clearCircles;
+window.toggleMarkers = toggleMarkers;
+window.clearPaths = clearPaths;
+window.toggleActivateButton = toggleActivateButton;
+window.degMinSecToDecimal = degDecimalMinToDecimal;
+window.degMinSecToDecimal = degMinSecToDecimal;
+window.updateConversionsBasedOn = updateConversionsBasedOn;
+window.copyCoords = copyCoords;
+window.openUnitConverter = openUnitConverter;
+window.closeUnitConverter = closeUnitConverter;
+window.typeIndicator = typeIndicator;
