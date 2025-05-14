@@ -32,10 +32,10 @@ function updateCircleList() {
     });
 }
 
-map.on('pointerdown', function (e) {
+map.on('mousedown', function (e) {
     if (activeTool !== 'circleDraw') return;
     if (!isResizing) {
-        selectedCircle = L.circle(e.latlng, { radius: 10, color: "green" }).addTo(map);
+        selectedCircle = L.circle(e.latlng, { radius: 20, color: "green" }).addTo(map);
         circles.push(selectedCircle);
 
         let marker = new L.marker(e.latlng, { opacity: 0 });
@@ -51,7 +51,7 @@ map.on('pointerdown', function (e) {
     }
 });
 
-map.on('pointermove', function (e) {
+map.on('mousemove', function (e) {
     if (isResizing && selectedCircle) {
         let newRadius = resizeHandle.distanceTo(e.latlng);
         selectedCircle.setRadius(newRadius);
@@ -59,7 +59,7 @@ map.on('pointermove', function (e) {
     }
 });
 
-map.on('pointerup', function () {
+map.on('mouseup', function () {
     if (isResizing) {
         isResizing = false;
         map.dragging.enable();

@@ -22,7 +22,7 @@ export const clearPaths = () => {
     pointsList.innerHTML = '<h2>Marker List</h2><p>Empty...</p>';
 };
 
-map.on('pointerdown', function (e) {
+map.on('mousedown', function (e) {
     if (activeTool === 'markerDraw') {
         let newMarker = new L.marker(e.latlng).addTo(map);
         pathMarkers.push(newMarker);

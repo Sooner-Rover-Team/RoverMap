@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "dependencies": {
     "@maptiler/leaflet-maptilersdk": "^4.0.3",
     "leaflet": "^1.9.4"
