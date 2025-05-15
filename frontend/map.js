@@ -1,13 +1,31 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-export const map = L.map('map').setView([38.4375, -110.8125], 13);
+export const map = L.map('map').setView([38.4375, -110.8125], 15);
 
-L.tileLayer('/tile/{z}/{x}/{y}', { maxZoom: 19 }).addTo(map);
+const tileLayer = L.tileLayer('/utah-tiles-2/{z}/{x}/{y}.png', {
+    attribution: 'GE Satellite Data',
+    maxZoom: 19,
+    minZoom: 13,
+    tileSize: 256,
+    noWrap: true,
+});
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-}).addTo(map);
+tileLayer.on('tileerror', function (e) {
+    console.error('Tile failed to load:', {
+        url: e.tile.src,
+        coords: e.coords,
+        error: e.error // could be undefined
+    });
+});
+
+tileLayer.addTo(map);
+
+console.log(new URL('/utah-tiles-2/17/25188/50355.png', window.location.href).href);
+
+// L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//     attribution: '© OpenStreetMap contributors'
+// }).addTo(map);
 
 // Rover marker polling
 // TODO: Implement this. Commented out for now because the output is annoying
