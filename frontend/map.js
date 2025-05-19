@@ -1,7 +1,7 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-export const map = L.map('map').setView([38.4375, -110.8125], 15);
+export const map = L.map('map').setView([38.4375, -110.8125], 17);
 
 const tileLayer = L.tileLayer('/utah-tiles-2/{z}/{x}/{y}.png', {
     attribution: 'GE Satellite Data',
