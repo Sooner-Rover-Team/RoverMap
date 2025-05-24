@@ -1,9 +1,11 @@
 // Config file for vite (bundler for npm)
 import { defineConfig } from 'vite';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
-export default defineConfig({
-    root: 'frontend',
+export default {
+    plugins: [basicSsl()],
     server: {
-        port: 3000
+        https: true,
+        port: 5173,
     }
-});
+};

@@ -1,0 +1,1 @@
+cargo:rustc-check-cfg=cfg(s2n_tls_external_build)

@@ -12,6 +12,7 @@ import {
     closeUnitConverter,
     addWayPoint
 } from './helpers.js';
+import { startGPSClient } from './gps-client.js';
 
 // Event listeners
 window.toggleCircles = toggleCircles;
@@ -32,4 +33,16 @@ window.onload = () => {
     window.addWayPoint = () => {
         addWayPoint(map, pathMarkers);
     };
+
+    // Listen for GPS data
+    window.addEventListener('gps-update', (e) => {
+        const { lat, lon } = e.detail;
+        console.log(`GPS Update: Latitude: ${lat}, Longitude: ${lon}`);
+        if (lat && lon) {
+            const gpsMarker = new L.marker([lat, lon]).addTo(map).bindPopup("Rover Position");
+        }
+    });
+
+    // Start the GPS client
+    startGPSClient();
 };
