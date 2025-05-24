@@ -1,46 +1,45 @@
+use anyhow::Result;
 use rand::Rng;
-use rand::SeedableRng;
-use s2n_quic::Server;
-use std::path::Path;
-use std::{error::Error, time::Duration};
-use tokio::io::AsyncWriteExt;
-use tokio::time;
+use tokio::time::{sleep, Duration};
+use wtransport::{Endpoint, Identity, ServerConfig};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn Error>> {
-    let mut server = Server::builder()
-        .with_tls((Path::new("../cert.pem"), Path::new("../key.pem")))?
-        .with_io("0.0.0.0:4433")?
-        .start()?;
+async fn main() -> Result<()> {
+    let config = ServerConfig::builder()
+        .with_bind_default(4433)
+        .with_identity(Identity::load_pemfiles("../cert.pem", "../key.pem").await?)
+        .build();
 
-    println!("✅ QUIC GPS stream server running on https://localhost:4433");
+    let server = Endpoint::server(config)?;
 
-    while let Some(mut conn) = server.accept().await {
-        println!("🔗 Connection accepted");
+    println!("✅ WebTransport GPS server running on https://localhost:4433");
+
+    loop {
+        let incoming_session = server.accept().await;
+        let incoming_request = incoming_session.await?;
+        let connection = incoming_request.accept().await?;
+
+        println!("🔗 New client connected");
 
         tokio::spawn(async move {
-            match conn.open_send_stream().await {
-                Ok(mut stream) => {
-                    loop {
-                        let mut rng = rand::rngs::StdRng::from_entropy();
-                        let lat = 38.4375 + rng.gen_range(0.0..0.01);
-                        let lon = -110.8125 + rng.gen_range(0.0..0.01);
-                        let data = format!("{:.6},{:.6}\n", lat, lon); // add newline to delimit
+            loop {
+                // Scope the RNG inside this block so it's dropped before any `.await`
+                let gps_str = {
+                    let mut rand = rand::rng(); // or `fastrand::rng()` if that's your custom fn
+                    let lat = 38.4375 + rand.random_range(0.0..0.01);
+                    let lon = -110.8125 + rand.random_range(0.0..0.01);
+                    format!("{:.6},{:.6}", lat, lon)
+                };
 
-                        if let Err(e) = stream.write_all(data.as_bytes()).await {
-                            eprintln!("❌ Stream write error: {:?}", e);
-                            break;
-                        }
+                if let Err(e) = connection.send_datagram(gps_str.into_bytes()) {
+                    eprintln!("❌ Failed to send datagram: {:?}", e);
+                    break;
+                }
 
-                        time::sleep(Duration::from_secs(1)).await;
-                    }
-                }
-                Err(e) => {
-                    eprintln!("❌ Failed to open stream: {:?}", e);
-                }
+                sleep(Duration::from_secs(1)).await;
             }
+
+            println!("❌ Client disconnected or datagram error");
         });
     }
-
-    Ok(())
 }

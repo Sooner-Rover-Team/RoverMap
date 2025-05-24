@@ -4,6 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0"
 s2n-quic = "1.58.0"
 tokio = { version = "1", features = ["full"] }
-rand = "0.8"
+rand = "0.9.1"
+wtransport = "0.6.1"
