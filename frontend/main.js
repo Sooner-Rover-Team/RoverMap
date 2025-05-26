@@ -12,7 +12,7 @@ import {
     closeUnitConverter,
     addWayPoint
 } from './helpers.js';
-import { startGPSClient } from './gps-client.js';
+import { startGPSClient } from './gps-client.js';  // This now returns the WebSocket
 
 // Event listeners
 window.toggleCircles = toggleCircles;
@@ -28,7 +28,7 @@ window.openUnitConverter = openUnitConverter;
 window.closeUnitConverter = closeUnitConverter;
 
 const pathMarkers = [];
-let currentPositionMarker = null;  // Store reference to current position marker
+let currentPositionMarker = null;
 
 window.onload = () => {
     window.addWayPoint = () => {
@@ -38,36 +38,21 @@ window.onload = () => {
     // Listen for GPS data
     window.addEventListener('gps-update', (e) => {
         const { lat, lon } = e.detail;
-        console.log(`GPS Update: Latitude: ${lat}, Longitude: ${lon}`);
+        console.log(`📡 GPS Update: Latitude ${lat}, Longitude ${lon}`);
 
-        if (lat && lon) {
-            // Remove previous marker if it exists
-            if (currentPositionMarker) {
-                map.removeLayer(currentPositionMarker);
-            }
-
-            // Add new marker and center map on it
-            currentPositionMarker = new L.marker([lat, lon], {
-                icon: new L.DivIcon({
-                    className: 'gps-marker',
-                    html: '<div class="gps-pulse"></div>',
-                    iconSize: [20, 20]
-                })
-            }).addTo(map)
-                .bindPopup("Current Position");
-
-            map.setView([lat, lon], map.getZoom());
+        // Add or update the current position marker
+        if (currentPositionMarker) {
+            currentPositionMarker.setLatLng([lat, lon]);
+        } else {
+            currentPositionMarker = L.marker([lat, lon]).addTo(map);
         }
     });
 
-    // Start the GPS client
-    startGPSClient();
+    const socket = startGPSClient(); // Get the WebSocket instance
 
-    // NOTE: For websockets
-    // // Cleanup when page unloads
-    // window.addEventListener('beforeunload', () => {
-    //     if (socket && socket.readyState === WebSocket.OPEN) {
-    //         socket.close();
-    //     }
-    // });
+    window.addEventListener('beforeunload', () => {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.close();
+        }
+    });
 };

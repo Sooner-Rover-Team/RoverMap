@@ -1,47 +1,27 @@
 export function startGPSClient() {
-    const url = 'https://localhost:4433';
-    const transport = new WebTransport(url);
+    const socket = new WebSocket('ws://localhost:9001'); // Use your actual WS port
 
-    transport.ready
-        .then(async () => {
-            console.log('✅ Connected to GPS server');
+    socket.onopen = () => {
+        console.log('🔌 WebSocket connection established');
+    }
 
-            const streamReader = transport.incomingUnidirectionalStreams.getReader();
+    socket.onmessage = (event) => {
+        try {
+            const data = JSON.parse(event.data);
+            const gpsEvent = new CustomEvent('gps-update', { detail: data });
+            window.dispatchEvent(gpsEvent);
+        } catch (e) {
+            console.error('❌ Invalid GPS data:', e);
+        }
+    };
 
-            while (true) {
-                const { value: stream, done } = await streamReader.read();
-                if (done || !stream) break;
+    socket.onerror = (e) => {
+        console.error('❌ WebSocket error:', e);
+    };
 
-                const reader = stream.getReader();
-                const decoder = new TextDecoder();
-                let message = "";
+    socket.onclose = () => {
+        console.warn('⚠️ WebSocket connection closed');
+    };
 
-                while (true) {
-                    const { value, done } = await reader.read();
-                    if (done) break;
-                    message += decoder.decode(value, { stream: true });
-                }
-
-                console.log('📡 Received GPS data:', message);
-
-                // Example: assume message is "LAT:12.34,LON:56.78"
-                const match = message.match(/LAT:([-\d.]+),LON:([-\d.]+)/);
-                if (match) {
-                    const lat = parseFloat(match[1]);
-                    const lon = parseFloat(match[2]);
-
-                    // Dispatch custom event to main.js
-                    window.dispatchEvent(new CustomEvent('gps-update', {
-                        detail: { lat, lon }
-                    }));
-                } else {
-                    console.warn("⚠️ Malformed GPS data:", message);
-                }
-            }
-        })
-        .catch(error => {
-            console.error('❌ Failed to connect via WebTransport:', error);
-        });
-
-    return transport; // In case caller wants to close it later
+    return socket;
 }

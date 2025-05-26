@@ -126,3 +126,38 @@ h2 {
     flex: 1;
     padding: 1em;
 }
+
+.gps-marker {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: transparent;
+}
+
+.gps-pulse {
+    width: 20px;
+    height: 20px;
+    background-color: rgba(0, 128, 255, 0.5);
+    border: 2px solid #0080ff;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    box-sizing: border-box;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 1;
+    }
+
+    70% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+}
