@@ -4,4 +4,4 @@ node_modules
 map_tiles
 public/
 dist/
-gps_webtransport/target/debug/
+gps_webtransport/target/
