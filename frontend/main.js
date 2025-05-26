@@ -27,7 +27,8 @@ window.copyCoords = copyCoords;
 window.openUnitConverter = openUnitConverter;
 window.closeUnitConverter = closeUnitConverter;
 
-const pathMarkers = []
+const pathMarkers = [];
+let currentPositionMarker = null;  // Store reference to current position marker
 
 window.onload = () => {
     window.addWayPoint = () => {
@@ -38,11 +39,35 @@ window.onload = () => {
     window.addEventListener('gps-update', (e) => {
         const { lat, lon } = e.detail;
         console.log(`GPS Update: Latitude: ${lat}, Longitude: ${lon}`);
+
         if (lat && lon) {
-            const gpsMarker = new L.marker([lat, lon]).addTo(map).bindPopup("Rover Position");
+            // Remove previous marker if it exists
+            if (currentPositionMarker) {
+                map.removeLayer(currentPositionMarker);
+            }
+
+            // Add new marker and center map on it
+            currentPositionMarker = new L.marker([lat, lon], {
+                icon: new L.DivIcon({
+                    className: 'gps-marker',
+                    html: '<div class="gps-pulse"></div>',
+                    iconSize: [20, 20]
+                })
+            }).addTo(map)
+                .bindPopup("Current Position");
+
+            map.setView([lat, lon], map.getZoom());
         }
     });
 
     // Start the GPS client
     startGPSClient();
+
+    // NOTE: For websockets
+    // // Cleanup when page unloads
+    // window.addEventListener('beforeunload', () => {
+    //     if (socket && socket.readyState === WebSocket.OPEN) {
+    //         socket.close();
+    //     }
+    // });
 };

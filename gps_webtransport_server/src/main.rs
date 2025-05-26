@@ -1,45 +1,67 @@
 use anyhow::Result;
-use rand::Rng;
-use tokio::time::{sleep, Duration};
+use std::time::Duration;
+use tracing::Instrument;
+use tracing::{error, info, info_span};
+use wtransport::endpoint::IncomingSession;
 use wtransport::{Endpoint, Identity, ServerConfig};
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    init_logging();
+
     let config = ServerConfig::builder()
         .with_bind_default(4433)
-        .with_identity(Identity::load_pemfiles("../cert.pem", "../key.pem").await?)
+        .with_identity(Identity::load_pemfiles("../localhost.pem", "../localhost-key.pem").await?)
+        .keep_alive_interval(Some(Duration::from_secs(3)))
         .build();
 
     let server = Endpoint::server(config)?;
 
-    println!("✅ WebTransport GPS server running on https://localhost:4433");
+    info!("✅ WebTransport server ready at https://localhost:4433");
 
-    loop {
+    for id in 0.. {
         let incoming_session = server.accept().await;
-        let incoming_request = incoming_session.await?;
-        let connection = incoming_request.accept().await?;
-
-        println!("🔗 New client connected");
-
-        tokio::spawn(async move {
-            loop {
-                // Scope the RNG inside this block so it's dropped before any `.await`
-                let gps_str = {
-                    let mut rand = rand::rng(); // or `fastrand::rng()` if that's your custom fn
-                    let lat = 38.4375 + rand.random_range(0.0..0.01);
-                    let lon = -110.8125 + rand.random_range(0.0..0.01);
-                    format!("{:.6},{:.6}", lat, lon)
-                };
-
-                if let Err(e) = connection.send_datagram(gps_str.into_bytes()) {
-                    eprintln!("❌ Failed to send datagram: {:?}", e);
-                    break;
-                }
-
-                sleep(Duration::from_secs(1)).await;
-            }
-
-            println!("❌ Client disconnected or datagram error");
-        });
+        tokio::spawn(handle_connection(incoming_session).instrument(info_span!("Connection", id)));
     }
+
+    Ok(())
+}
+
+async fn handle_connection(incoming_session: IncomingSession) {
+    let result = handle_connection_impl(incoming_session).await;
+    if let Err(e) = result {
+        error!("❌ Connection error: {:?}", e);
+    }
+}
+
+async fn handle_connection_impl(incoming_session: IncomingSession) -> Result<()> {
+    info!("Waiting for session request...");
+
+    let session_request = incoming_session.await?;
+
+    info!(
+        "New session: Authority: '{}', Path: '{}'",
+        session_request.authority(),
+        session_request.path()
+    );
+
+    let connection = session_request.accept().await?;
+    info!("✅ Accepted connection, pushing data to client...");
+
+    // Send a unidirectional stream to the client
+    let mut send_stream = connection.open_uni().await?.await?;
+    let gps_data = b"LAT: 37.7749, LON: -122.4194\n";
+    send_stream.write_all(gps_data).await?;
+    send_stream.finish().await?;
+
+    info!("✅ Message sent");
+
+    Ok(())
+}
+
+fn init_logging() {
+    tracing_subscriber::fmt()
+        .with_target(true)
+        .with_level(true)
+        .init();
 }
