@@ -2,7 +2,7 @@ import { map } from './map.js';
 import { toggleActivateButton } from './helpers.js';
 
 let circles = [];
-let lables = [];
+let labels = [];
 let selectedCircle = null;
 let isResizing = false;
 let resizeHandle;
@@ -18,9 +18,9 @@ export const toggleCircles = () => {
 
 export const clearCircles = () => {
     circles.forEach(circle => circle.remove());
-    lables.forEach(label => label.remove());
+    labels.forEach(label => label.remove());
     circles = [];
-    lables = [];
+    labels = [];
     updateCircleList();
 };
 
@@ -42,7 +42,7 @@ map.on('mousedown', function (e) {
         marker.bindTooltip(circles.length + "", {
             permanent: true, className: "circleLabel", direction: 'top', offset: [-15, 20]
         }).addTo(map);
-        lables.push(marker);
+        labels.push(marker);
 
         isResizing = true;
         resizeHandle = e.latlng;
