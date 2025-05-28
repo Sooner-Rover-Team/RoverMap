@@ -6,17 +6,14 @@ export const map = L.map('map').setView([38.4375, -110.8125], 17);
 const tileLayer = L.tileLayer('/utah-tiles-2/{z}/{x}/{y}.png', {
     attribution: 'GE Satellite Data',
     maxZoom: 19,
-    minZoom: 13,
+    minZoom: 10,
     tileSize: 256,
     noWrap: true,
 });
 
 tileLayer.on('tileerror', function (e) {
-    console.error('Tile failed to load:', {
-        url: e.tile.src,
-        coords: e.coords,
-        error: e.error // could be undefined
-    });
+    const img = e.tile;
+    img.src = '../map-placeholder.png'; // placeholder image for if tiles don't load
 });
 
 tileLayer.addTo(map);
