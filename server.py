@@ -5,7 +5,7 @@ import threading
 import inspect
 
 
-SERVER_PORT = 1234
+SERVER_PORT = 3000
 
 
 class DummyClass:

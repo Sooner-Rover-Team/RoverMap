@@ -1,0 +1,10 @@
+[package]
+name = "gps_webtransport_server"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+tokio-tungstenite = "0.26.2"
+tungstenite = "0.26.2"
+futures-util = "0.3"

@@ -4,20 +4,17 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Rover Map Test</title>
+    <title>Rover Map</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./index.css">
-    <script src="./leaflet/leaflet.js"></script>
-
-    <link rel="stylesheet" href="./leaflet/leaflet.css">
 </head>
 
 <body>
     <div onclick="circleSelect(this)" id="newCircle"></div>
 
     <div id="map" style="width: 90%; height: 400px; margin: auto"></div>
-
+    <script type="module" src="/main.js"></script>
     <div id="container">
         <div id="tools" class="section">
             <h2 class="section-title">Tools</h2>
@@ -29,6 +26,9 @@
                     class="deactivated-tool-button">INACTIVE</button>
                 <br>
                 <button onClick="clearCircles()" id="clearCircleButton">CLEAR CIRCLES</button>
+                <br>
+                <button onClick="circleOnPoint()" id="circleOnPointButton">Click to add circle centered around a
+                    point</button>
             </div>
             <br>
             <div id="pathTools">
@@ -41,7 +41,7 @@
             <br>
             <div id="otherTools">
                 <h3>Other Tools:</h3>
-                <button onclick="typeIndicator()">Add point for human reference</button>
+                <button onclick="addWayPoint()">Add point for human reference</button>
                 <br>
                 <button onclick="openUnitConverter()">Open unit converter</button>
             </div>
@@ -85,14 +85,11 @@
         <br>
 
         <button onclick="closeUnitConverter()" id="closeUnitConverterButton">Close Unit Converter</button>
-        <!-- <button onclick="forceUpdate()" id="forceUpdate">Force calculation (Mobile keyevents may not work)</button> -->
 
         <div id="saved">
             <p>Decimal values previously copied:</p>
         </div>
     </div>
-    <script src="index.js" async defer></script>
-    <!-- <script src="draw-tools.js"></script>-->
 </body>
 
 </html>

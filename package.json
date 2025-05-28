@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@fails-components/webtransport": "^1.3.1",
+    "@maptiler/leaflet-maptilersdk": "^4.0.3",
+    "leaflet": "^1.9.4",
+    "websockets": "^0.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-basic-ssl": "^2.0.0",
+    "vite": "^6.3.5"
+  }
+}
