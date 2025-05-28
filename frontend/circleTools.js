@@ -41,7 +41,7 @@ export function circleOnPoint() {
     if (!isConfirmed) return;
 
     const center = L.latLng(lat, lon);
-    const circle = L.circle(center, { radius: 50, color: "blue" }).addTo(map);
+    const circle = L.circle(center, { radius: 20, color: "blue" }).addTo(map);
     circles.push(circle);
 
     updateCircleList();
