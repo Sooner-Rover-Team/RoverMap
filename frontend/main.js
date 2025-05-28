@@ -1,6 +1,6 @@
 import './index.css';
 import { map } from './map.js';
-import { toggleCircles, clearCircles } from './circleTools';
+import { toggleCircles, clearCircles, circleOnPoint } from './circleTools';
 import { toggleMarkers, clearPaths } from './pathTools';
 import {
     toggleActivateButton,
@@ -26,6 +26,7 @@ window.updateConversionsBasedOn = updateConversionsBasedOn;
 window.copyCoords = copyCoords;
 window.openUnitConverter = openUnitConverter;
 window.closeUnitConverter = closeUnitConverter;
+window.circleOnPoint = circleOnPoint;
 
 const pathMarkers = [];
 let currentPositionMarker = null;

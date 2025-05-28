@@ -24,6 +24,35 @@ export const clearCircles = () => {
     updateCircleList();
 };
 
+export function circleOnPoint() {
+    const input = prompt("Enter coordinates in `lat lon` format (e.g. 37.7749 -122.4194):")?.trim();
+    if (!input) return;
+
+    const [latStr, lonStr] = input.split(/\s+/);
+    const lat = parseFloat(latStr);
+    const lon = parseFloat(lonStr);
+
+    if (isNaN(lat) || isNaN(lon)) {
+        alert("Invalid coordinates. Please enter valid numbers.");
+        return;
+    }
+
+    const isConfirmed = confirm(`Create a circle at latitude: ${lat}, longitude: ${lon}?`);
+    if (!isConfirmed) return;
+
+    const center = L.latLng(lat, lon);
+    const circle = L.circle(center, { radius: 50, color: "blue" }).addTo(map);
+    circles.push(circle);
+
+    const label = L.marker(center, { opacity: 0 });
+    label.bindTooltip(`${circles.length}`, {
+        permanent: true, className: "circleLabel", direction: 'top', offset: [-15, 20]
+    }).addTo(map);
+    labels.push(label);
+
+    updateCircleList();
+}
+
 function updateCircleList() {
     circleList.innerHTML = '<h2>Circle List</h2>';
     circles.forEach((circle, index) => {
