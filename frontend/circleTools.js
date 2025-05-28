@@ -25,7 +25,7 @@ export const clearCircles = () => {
 };
 
 export function circleOnPoint() {
-    const input = prompt("Enter coordinates in `lat lon` format (e.g. 37.7749 -122.4194):")?.trim();
+    const input = prompt("Enter coordinates in `lat lon` format (e.g. 38.4375, -110.8125):")?.trim();
     if (!input) return;
 
     const [latStr, lonStr] = input.split(/\s+/);
@@ -43,12 +43,6 @@ export function circleOnPoint() {
     const center = L.latLng(lat, lon);
     const circle = L.circle(center, { radius: 50, color: "blue" }).addTo(map);
     circles.push(circle);
-
-    const label = L.marker(center, { opacity: 0 });
-    label.bindTooltip(`${circles.length}`, {
-        permanent: true, className: "circleLabel", direction: 'top', offset: [-15, 20]
-    }).addTo(map);
-    labels.push(label);
 
     updateCircleList();
 }
