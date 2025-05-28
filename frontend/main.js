@@ -39,7 +39,7 @@ window.onload = () => {
     // Listen for GPS data
     window.addEventListener('gps-update', (e) => {
         const { lat, lon } = e.detail;
-        console.log(`📡 GPS Update: Latitude ${lat}, Longitude ${lon}`);
+        // FOR TESTING: console.log(`📡 GPS Update: Latitude ${lat}, Longitude ${lon}`);
 
         // Add or update the current position marker
         if (currentPositionMarker) {

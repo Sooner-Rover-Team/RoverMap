@@ -1,5 +1,5 @@
 export function startGPSClient() {
-    const socket = new WebSocket('ws://localhost:9001'); // Use your actual WS port
+    const socket = new WebSocket('ws://localhost:9001'); // make sure port matches server port
 
     socket.onopen = () => {
         console.log('🔌 WebSocket connection established');
