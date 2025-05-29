@@ -7,6 +7,32 @@ This houses both the JS/vite frontend to render the map with the rover's coordin
 The frontend provides a leafletjs map which draws the rover's position on it.
 The map renderer uses map tile image files created using QGIS software and stored locally in the `public` and `dist` folders.
 
+## Installation
+
+To install the project, you need our project management tools...
+
+### Frontend
+
+First, you'll need to grab [a tool called `volta`](https://docs.volta.sh/guide/getting-started) first. You'll only have to do this **once per machine**! :D
+
+- If you're on Windows, open a terminal, then type: `winget install Volta.Volta`
+- On macOS or Linux, use: `curl https://get.volta.sh | bash`
+
+After you have that, **close your terminal**. Open a new one and navigate to this directory (`RoverMap`). Then, type: `volta setup && npm i` to set up the project. (if you get an error, restart your computer and try again - it'll refresh your environment variables)
+
+You **MUST** do this when your computer has an internet connection! Otherwise, you're gonna be missing dependencies. **You only need to do it once**.
+
+### OPTIONAL: Fake Backend
+
+We have a "fake backend" which teleports the Rover between some coordinates to show that the map works. You don't need it at competition, so don't worry about installing it.
+
+It's written in Rust, so if you want to use it, you'll need to install Rust on your computer:
+
+- On Windows, you use their included installer. Download their `.exe` file and run it! Press `1`, then [Enter] to start installation. You'll be asked to install "Visual C++ build tools" to complete installation. **NOTE: Visual C++ build tools (the purple one) will take a while - grab a drink or something while it installs**.
+- On macOS or Linux, just type: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+
+Everything you need is now installed!
+
 ### Using QGIS to generate map tiles
 
 **1. Generate an osm file using Open Street Maps**
@@ -45,13 +71,11 @@ For online run, you can run `npx vite` to run the server's frontend. (Note: this
 
 #### Offline Instructions
 
-For offline, first make sure to run `npx vite build` for any new changes before
-running offline. Then, given that the `dist` folder is properly populated, run
-`npx serve dist` to serve the frontend offline.
+For offline, first make sure to run `npx vite build` for any new changes before running offline. Then, given that the `dist` folder is properly populated, run `npx serve dist` to serve the frontend offline.
 
 ### For Server
 
-The server for this frontend is to be implemented in the `auto_ros2` repository. For testing purposes, a fake gps server is set up in `gps_webtransport_server`. To run the fake gps server, simply run:
+The server for this frontend is implemented in the `auto_ros2` repository. For testing purposes, a fake GPS server is set up in `gps_webtransport_server`. To run the fake GPS server, simply run:
 
 ```
 cd gps_webtransport_server
