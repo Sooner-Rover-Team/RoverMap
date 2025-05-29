@@ -99,3 +99,10 @@ export const addWayPoint = (map, pathMarkers) => {
         pathMarkers.push(marker);
     }
 };
+
+export const removeWayPoint = (map, pathMarkers) => {
+    if (!pathMarkers || pathMarkers.length === 0) return;
+
+    const marker = pathMarkers.pop();
+    map.removeLayer(marker);
+};

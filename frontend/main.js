@@ -10,7 +10,8 @@ import {
     copyCoords,
     openUnitConverter,
     closeUnitConverter,
-    addWayPoint
+    addWayPoint,
+    removeWayPoint
 } from './helpers.js';
 import { startGPSClient } from './gps-client.js';  // This now returns the WebSocket
 
@@ -49,6 +50,10 @@ window.onload = () => {
         addWayPoint(map, pathMarkers);
     };
 
+    window.removeWayPoint = () => {
+        removeWayPoint(map, pathMarkers);
+    };
+
     // Listen for GPS data
     window.addEventListener('gps-update', (e) => {
         const { lat, lon } = e.detail;
@@ -59,6 +64,8 @@ window.onload = () => {
             currentPositionMarker.setLatLng([lat, lon]);
         } else {
             currentPositionMarker = L.marker([lat, lon], {icon: roverIcon}).addTo(map);
+            
+            map.setView([lat, lon], 15); // Center map around Rover initial position
         }
     });
 
