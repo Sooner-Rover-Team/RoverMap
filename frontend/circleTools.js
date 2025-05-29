@@ -44,6 +44,8 @@ export function circleOnPoint() {
     const circle = L.circle(center, { radius: 20, color: "blue" }).addTo(map);
     circles.push(circle);
 
+    map.setView(center, 17);
+
     updateCircleList();
 }
 
