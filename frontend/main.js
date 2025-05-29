@@ -31,7 +31,20 @@ window.circleOnPoint = circleOnPoint;
 const pathMarkers = [];
 let currentPositionMarker = null;
 
+
 window.onload = () => {
+    // Initialize rover icon
+    var roverIcon = L.icon({
+        iconUrl: 'rover.png',
+        shadowUrl: 'rover-shadow.png',
+    
+        iconSize:     [30, 30], // size of the icon
+        shadowSize:   [30, 30], // size of the shadow
+        iconAnchor:   [0, 0], // point of the icon which will correspond to marker's location
+        shadowAnchor: [-2, 1],  // the same for the shadow
+        popupAnchor:  [50, 50] // point from which the popup should open relative to the iconAnchor
+    });
+
     window.addWayPoint = () => {
         addWayPoint(map, pathMarkers);
     };
@@ -45,7 +58,7 @@ window.onload = () => {
         if (currentPositionMarker) {
             currentPositionMarker.setLatLng([lat, lon]);
         } else {
-            currentPositionMarker = L.marker([lat, lon]).addTo(map);
+            currentPositionMarker = L.marker([lat, lon], {icon: roverIcon}).addTo(map);
         }
     });
 
