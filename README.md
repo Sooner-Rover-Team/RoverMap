@@ -8,18 +8,21 @@ The frontend provides a leafletjs map which draws the rover's position on it.
 The map renderer uses map tile image files created using QGIS software and stored locally in the `public` and `dist` folders.
 
 ### Using QGIS to generate map tiles
+
 **1. Generate an osm file using Open Street Maps**
-First, you need to generate an osm file using Open Street Maps to ensure the correct extent for the map data. 
+First, you need to generate an osm file using Open Street Maps to ensure the correct extent for the map data.
 Our current map uses the following bounds from the old map server:
-``` javascript
+
+```javascript
 // the lat/lon coords are the center of the map, 10 is the default zoom.
-var map = L.map('map').setView([38.4375, -110.8125], 10);
+var map = L.map("map").setView([38.4375, -110.8125], 10);
 
 // These are the bounds of the rover team's map region for debugging.
-new L.marker([38.4375, -110.8125]).addTo(map)
-new L.marker([38.3750, -110.7500]).addTo(map)
+new L.marker([38.4375, -110.8125]).addTo(map);
+new L.marker([38.375, -110.75]).addTo(map);
 ```
-Go to [this link](https://www.openstreetmap.org/export#map=13/38.40107/-110.79815) to export an Open Street Map. Set the center as your desired center (in this case 38.4375, -110.8125), and set the bounds for the map as your desired bounds. Once the map has the correct bounds, export as an osm file, and save to your computer. 
+
+Go to [this link](https://www.openstreetmap.org/export#map=13/38.40107/-110.79815) to export an Open Street Map. Set the center as your desired center (in this case 38.4375, -110.8125), and set the bounds for the map as your desired bounds. Once the map has the correct bounds, export as an osm file, and save to your computer.
 **2. Import to QGIS**
 Download [QGIS](https://qgis.org/download/). Once downloaded, follow [these instructions](https://learnosm.org/en/osm-data/osm-in-qgis/) for importing an osm file. This should allow you to view the map on QGIS.
 **3. Add satellite imagery**
@@ -37,19 +40,24 @@ and run the following command to install project dependencies:
 ## Running and Integration
 
 ### For Frontend
+
 For online run, you can run `npx vite` to run the server's frontend. (Note: this requires for there to be map tiles in the `public` folder.)
 
 #### Offline Instructions
-For offline, first make sure to run `npx vite build` for any new changes before 
+
+For offline, first make sure to run `npx vite build` for any new changes before
 running offline. Then, given that the `dist` folder is properly populated, run
 `npx serve dist` to serve the frontend offline.
 
 ### For Server
+
 The server for this frontend is to be implemented in the `auto_ros2` repository. For testing purposes, a fake gps server is set up in `gps_webtransport_server`. To run the fake gps server, simply run:
+
 ```
 cd gps_webtransport_server
 cargo run
 ```
+
 When you run this server in combination with the map server, it should generate a fake rover position on the map that alternates between two points.
 
 ## Accessing
