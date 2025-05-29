@@ -13,7 +13,7 @@ const tileLayer = L.tileLayer('/utah-tiles-2/{z}/{x}/{y}.png', {
 
 tileLayer.on('tileerror', function (e) {
     const img = e.tile;
-    img.src = '../map-placeholder.png'; // placeholder image for if tiles don't load
+    img.src = '/map-placeholder.png'; // placeholder image for if tiles don't load
 });
 
 tileLayer.addTo(map);
