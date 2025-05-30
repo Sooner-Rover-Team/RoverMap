@@ -2,6 +2,6 @@ tiles/
 tiles.tar
 node_modules
 map_tiles
-public/
+public/utah-tiles-2/
 dist/
 gps_webtransport_server/target/

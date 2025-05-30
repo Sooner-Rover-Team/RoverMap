@@ -35,14 +35,14 @@ let currentPositionMarker = null;
 window.onload = () => {
     // Initialize rover icon
     var roverIcon = L.icon({
-        iconUrl: 'rover.png',
-        shadowUrl: 'rover-shadow.png',
-    
-        iconSize:     [30, 30], // size of the icon
-        shadowSize:   [30, 30], // size of the shadow
-        iconAnchor:   [0, 0], // point of the icon which will correspond to marker's location
+        iconUrl: '/rover-icon/rover.png',
+        shadowUrl: '/rover-icon/rover-shadow.png',
+
+        iconSize: [30, 30], // size of the icon
+        shadowSize: [30, 30], // size of the shadow
+        iconAnchor: [0, 0], // point of the icon which will correspond to marker's location
         shadowAnchor: [-2, 1],  // the same for the shadow
-        popupAnchor:  [50, 50] // point from which the popup should open relative to the iconAnchor
+        popupAnchor: [50, 50] // point from which the popup should open relative to the iconAnchor
     });
 
     window.addWayPoint = () => {
@@ -51,14 +51,18 @@ window.onload = () => {
 
     // Listen for GPS data
     window.addEventListener('gps-update', (e) => {
+        console.log("GPS updated");
         const { lat, lon } = e.detail;
-        // FOR TESTING: console.log(`📡 GPS Update: Latitude ${lat}, Longitude ${lon}`);
+        console.log(`📡 GPS Update: Latitude ${lat}, Longitude ${lon}`);
+        document.getElementById("rover-pos").innerHTML = `Rover Position: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
 
         // Add or update the current position marker
         if (currentPositionMarker) {
             currentPositionMarker.setLatLng([lat, lon]);
         } else {
-            currentPositionMarker = L.marker([lat, lon], {icon: roverIcon}).addTo(map);
+            currentPositionMarker = L.marker([lat, lon], { icon: roverIcon }).addTo(map);
+
+            map.setView([lat, lon], 13);
         }
     });
 
