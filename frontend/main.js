@@ -51,8 +51,10 @@ window.onload = () => {
 
     // Listen for GPS data
     window.addEventListener('gps-update', (e) => {
+        console.log("GPS updated");
         const { lat, lon } = e.detail;
-        // FOR TESTING: console.log(`📡 GPS Update: Latitude ${lat}, Longitude ${lon}`);
+        console.log(`📡 GPS Update: Latitude ${lat}, Longitude ${lon}`);
+        document.getElementById("rover-pos").innerHTML = `Rover Position: ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
 
         // Add or update the current position marker
         if (currentPositionMarker) {
@@ -60,7 +62,7 @@ window.onload = () => {
         } else {
             currentPositionMarker = L.marker([lat, lon], { icon: roverIcon }).addTo(map);
 
-            map.setView([lat, lon], 15);
+            map.setView([lat, lon], 13);
         }
     });
 
