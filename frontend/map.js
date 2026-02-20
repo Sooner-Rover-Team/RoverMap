@@ -1,5 +1,6 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import placeholderImage from '/images/map-placeholder.png'
 
 export const map = L.map('map').setView([38.4375, -110.8125], 17);
 
@@ -13,7 +14,7 @@ const tileLayer = L.tileLayer('/utah-tiles-2/{z}/{x}/{y}.png', {
 
 tileLayer.on('tileerror', function (e) {
     const img = e.tile;
-    img.src = '../map-placeholder.png'; // placeholder image for if tiles don't load
+    img.src = placeholderImage; // placeholder image for if tiles don't load
 });
 
 tileLayer.addTo(map);
