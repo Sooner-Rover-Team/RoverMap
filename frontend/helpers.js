@@ -108,7 +108,7 @@ export const removeWayPoint = (map, pathMarkers) => {
 
     const marker = pathMarkers.pop();
     map.removeLayer(marker);
-    pointLayer.clearLayers();
+    
 };
 
 export const hideAllElements = ()=>{
